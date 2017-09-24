@@ -1,0 +1,103 @@
+create or replace package pkg_persona is
+    procedure pcd_insertar_persona (
+        p_rut in PERSONA.RUT%TYPE,
+        p_primernombre in PERSONA.PRIMERNOMBRE%TYPE,
+        p_segundonombre in PERSONA.SEGUNDONOMBRE%TYPE,
+        p_primerapellido in PERSONA.PRIMERAPELLIDO%TYPE,
+        p_segundoapellido in PERSONA.SEGUNDOAPELLIDO%TYPE,
+        p_fechanacimiento in PERSONA.FECHANACIMIENTO%TYPE,
+        p_direccion in PERSONA.DIRECCION%TYPE,
+        p_telefono in PERSONA.TELEFONO%TYPE,
+        p_usuario_id in PERSONA.USUARIO_ID%TYPE
+    );
+    procedure pcd_update_persona (
+        p_rut in PERSONA.RUT%TYPE,
+        p_primernombre in PERSONA.PRIMERNOMBRE%TYPE,
+        p_segundonombre in PERSONA.SEGUNDONOMBRE%TYPE,
+        p_primerapellido in PERSONA.PRIMERAPELLIDO%TYPE,
+        p_segundoapellido in PERSONA.SEGUNDOAPELLIDO%TYPE,
+        p_fechanacimiento in PERSONA.FECHANACIMIENTO%TYPE,
+        p_direccion in PERSONA.DIRECCION%TYPE,
+        p_telefono in PERSONA.TELEFONO%type,
+        p_usuario_id in PERSONA.USUARIO_ID%TYPE
+    );
+    procedure pcd_borrar_persona (
+        p_rut in PERSONA.RUT%TYPE
+    );
+    
+    procedure pcd_listarpersona;
+
+end pkg_persona;
+
+create or replace package body pkg_persona is
+    procedure pcd_insertar_persona (
+        p_rut in PERSONA.RUT%TYPE,
+        p_primernombre in PERSONA.PRIMERNOMBRE%TYPE,
+        p_segundonombre in PERSONA.SEGUNDONOMBRE%TYPE,
+        p_primerapellido in PERSONA.PRIMERAPELLIDO%TYPE,
+        p_segundoapellido in PERSONA.SEGUNDOAPELLIDO%TYPE,
+        p_fechanacimiento in PERSONA.FECHANACIMIENTO%TYPE,
+        p_direccion in PERSONA.DIRECCION%TYPE,
+        p_telefono in PERSONA.TELEFONO%type,
+        p_usuario_id in PERSONA.USUARIO_ID%TYPE
+    )
+    is 
+    begin
+   
+    insert into persona(RUT, PRIMERNOMBRE, SEGUNDONOMBRE, PRIMERAPELLIDO, SEGUNDOAPELLIDO, FECHANACIMIENTO, DIRECCION, TELEFONO, USUARIO_ID)
+    values (p_rut, p_primernombre, p_segundonombre, p_primerapellido, p_segundoapellido, p_fechanacimiento, p_direccion, p_telefono, p_usuario_id);
+    commit;
+    end;
+    
+    procedure pcd_update_persona (
+        p_rut in PERSONA.RUT%TYPE,
+        p_primernombre in PERSONA.PRIMERNOMBRE%TYPE,
+        p_segundonombre in PERSONA.SEGUNDONOMBRE%TYPE,
+        p_primerapellido in PERSONA.PRIMERAPELLIDO%TYPE,
+        p_segundoapellido in PERSONA.SEGUNDOAPELLIDO%TYPE,
+        p_fechanacimiento in PERSONA.FECHANACIMIENTO%TYPE,
+        p_direccion in PERSONA.DIRECCION%TYPE,
+        p_telefono in PERSONA.TELEFONO%type,
+        p_usuario_id in PERSONA.USUARIO_ID%TYPE
+    )
+        is 
+    begin
+        update persona set 
+                        PRIMERNOMBRE=p_primernombre, 
+                        SEGUNDONOMBRE=p_segundonombre, 
+                        PRIMERAPELLIDO=p_primerapellido, 
+                        SEGUNDOAPELLIDO=p_segundoapellido, 
+                        FECHANACIMIENTO=p_fechanacimiento, 
+                        DIRECCION=p_direccion, 
+                        TELEFONO=p_telefono, 
+                        USUARIO_ID=p_usuario_id
+        where RUT = P_RUT;
+     commit;
+    end;
+
+    procedure pcd_borrar_persona (
+        p_rut in PERSONA.RUT%TYPE
+    )
+    is 
+    begin
+        delete from persona where rut = p_rut;
+        commit;
+    end;
+    
+    procedure pcd_listarpersona is
+         cursor cur is        
+            select rut, primernombre, segundonombre, primerapellido, segundoapellido, fechanacimiento, direccion, telefono, usuario_id
+            from PERSONA
+            order by rut;
+        fila cur%ROWTYPE;
+    begin
+        open cur; 
+            loop
+                fetch CUR into fila;
+                exit when CUR%NOTFOUND;
+                DBMS_OUTPUT.put_liNE(fila.rut || ' ' ||fila.primernombre);
+            end loop;
+        close cur;
+    end;
+    
+end pkg_persona;

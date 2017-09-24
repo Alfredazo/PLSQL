@@ -1,0 +1,98 @@
+create or replace package pkg_empresa is
+    procedure pcd_insertar_empresa
+    (
+       p_id in EMPRESA.ID%TYPE,
+       p_nombre in EMPRESA.NOMBRE%TYPE,
+       p_descripcion in EMPRESA.DESCRIPCION%TYPE,
+       p_idtipoempresa in EMPRESA.IDTIPOEMPRESA%TYPE,
+       p_activo in EMPRESA.ACTIVO%TYPE,
+       p_producto_id in EMPRESA.PRODUCTO_ID%TYPE,
+       p_rol in EMPRESA.ROL%TYPE,
+       p_rut in EMPRESA.RUT%TYPE
+    );
+    procedure pcd_update_empresa
+    (
+       p_id in EMPRESA.ID%TYPE,
+       p_nombre in EMPRESA.NOMBRE%TYPE,
+       p_descripcion in EMPRESA.DESCRIPCION%TYPE,
+       p_idtipoempresa in EMPRESA.IDTIPOEMPRESA%TYPE,
+       p_activo in EMPRESA.ACTIVO%TYPE,
+       p_producto_id in EMPRESA.PRODUCTO_ID%TYPE,
+       p_rol in EMPRESA.ROL%TYPE,
+       p_rut in EMPRESA.RUT%TYPE
+    );
+    procedure pcd_borrar_empresa (
+            p_id in EMPRESA.ID%TYPE
+        );
+    procedure  pcd_listarempresa ;
+end pkg_empresa;
+create or replace package body pkg_empresa is
+    procedure pcd_insertar_empresa
+    (
+       p_id in EMPRESA.ID%TYPE,
+       p_nombre in EMPRESA.NOMBRE%TYPE,
+       p_descripcion in EMPRESA.DESCRIPCION%TYPE,
+       p_idtipoempresa in EMPRESA.IDTIPOEMPRESA%TYPE,
+       p_activo in EMPRESA.ACTIVO%TYPE,
+       p_producto_id in EMPRESA.PRODUCTO_ID%TYPE,
+       p_rol in EMPRESA.ROL%TYPE,
+       p_rut in EMPRESA.RUT%TYPE
+    )
+    is 
+    begin
+        insert into EMPRESA (ID, NOMBRE, DESCRIPCION, IDTIPOEMPRESA, ACTIVO, PRODUCTO_ID, ROL, RUT)
+        values(p_id, p_nombre, p_descripcion, p_idtipoempresa, p_activo, p_producto_id, p_rol, p_rut);
+        commit;
+    end;
+    
+    procedure pcd_update_empresa
+    (
+       p_id in EMPRESA.ID%TYPE,
+       p_nombre in EMPRESA.NOMBRE%TYPE,
+       p_descripcion in EMPRESA.DESCRIPCION%TYPE,
+       p_idtipoempresa in EMPRESA.IDTIPOEMPRESA%TYPE,
+       p_activo in EMPRESA.ACTIVO%TYPE,
+       p_producto_id in EMPRESA.PRODUCTO_ID%TYPE,
+       p_rol in EMPRESA.ROL%TYPE,
+       p_rut in EMPRESA.RUT%TYPE
+    )
+    is 
+    begin
+        update empresa set 
+                        NOMBRE=p_nombre, 
+                        DESCRIPCION=p_descripcion, 
+                        IDTIPOEMPRESA=p_idtipoempresa, 
+                        ACTIVO=p_activo, 
+                        PRODUCTO_ID=p_producto_id, 
+                        ROL=p_rol, 
+                        RUT=p_rut
+            where ID = p_id;
+         commit;
+    end;
+
+    procedure pcd_borrar_empresa (
+        p_id in EMPRESA.ID%TYPE
+    )
+    is 
+    begin
+        delete from EMPRESA where ID = p_id;
+        commit;
+    end;
+    
+   procedure  pcd_listarempresa is
+         cursor cur is        
+            select id, nombre, descripcion, idtipoempresa, activo, producto_id, rol, rut
+            from empresa
+            order by id;
+        fila cur%ROWTYPE;
+    begin
+        open cur; 
+            loop
+                fetch CUR into fila;
+                exit when CUR%NOTFOUND;
+                DBMS_OUTPUT.put_liNE(fila.id || ' ' ||fila.nombre);
+            end loop;
+        close cur;
+    end;
+    
+end pkg_empresa;

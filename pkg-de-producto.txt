@@ -1,0 +1,101 @@
+create or replace package pkg_producto is
+    procedure pkg_insertar_producto (
+        p_id in PRODUCTO.ID%TYPE,
+        p_nombre in PRODUCTO.NOMBRE%TYPE,
+        p_precio in PRODUCTO.PRECIO%TYPE,
+        p_descripcion in PRODUCTO.DESCRIPCION%TYPE,
+        p_fotografia in PRODUCTO.FOTOGRAFIA%TYPE,
+        p_activo in PRODUCTO.ACTIVO%TYPE,
+        p_idempresa in PRODUCTO.IDEMPRESA%TYPE,
+        p_tipoproducto_id in PRODUCTO.TIPOPRODUCTO_ID%TYPE,
+        p_fechaingreso in PRODUCTO.FECHAINGRESO%TYPE
+    );
+    procedure pcd_update_producto
+    (
+         p_id in PRODUCTO.ID%TYPE,
+         p_nombre in PRODUCTO.NOMBRE%TYPE,
+         p_precio in PRODUCTO.PRECIO%TYPE,
+         p_descripcion in PRODUCTO.DESCRIPCION%TYPE,
+         p_fotografia in PRODUCTO.FOTOGRAFIA%TYPE,
+         p_activo in PRODUCTO.ACTIVO%TYPE,
+         p_idempresa in PRODUCTO.IDEMPRESA%TYPE,
+         p_tipoproducto_id in PRODUCTO.TIPOPRODUCTO_ID%TYPE,
+         p_fechaingreso in PRODUCTO.FECHAINGRESO%TYPE
+    );
+     procedure pcd_borrar_persona (
+        p_id in PRODUCTO.ID%TYPE
+    );
+    procedure  pcd_listarproducto;
+end pkg_producto;
+
+create or replace package body pkg_insertar_producto is
+    procedure pcd_producto (
+        p_id in PRODUCTO.ID%TYPE,
+        p_nombre in PRODUCTO.NOMBRE%TYPE,
+        p_precio in PRODUCTO.PRECIO%TYPE,
+        p_descripcion in PRODUCTO.DESCRIPCION%TYPE,
+        p_fotografia in PRODUCTO.FOTOGRAFIA%TYPE,
+        p_activo in PRODUCTO.ACTIVO%TYPE,
+        p_idempresa in PRODUCTO.IDEMPRESA%TYPE,
+        p_tipoproducto_id in PRODUCTO.TIPOPRODUCTO_ID%TYPE,
+        p_fechaingreso in PRODUCTO.FECHAINGRESO%TYPE
+    )
+    is 
+    begin
+        insert into PRODUCTO (ID, NOMBRE, PRECIO, DESCRIPCION, FOTOGRAFIA, ACTIVO, IDEMPRESA, TIPOPRODUCTO_ID, FECHAINGRESO)
+        values(p_id, p_nombre, p_precio, p_descripcion, p_fotografia, p_activo, p_idempresa, p_tipoproducto_id, p_fechaingreso);
+        commit;
+    end;
+
+    procedure pcd_update_producto
+        (
+            p_id in PRODUCTO.ID%TYPE,
+            p_nombre in PRODUCTO.NOMBRE%TYPE,
+            p_precio in PRODUCTO.PRECIO%TYPE,
+            p_descripcion in PRODUCTO.DESCRIPCION%TYPE,
+            p_fotografia in PRODUCTO.FOTOGRAFIA%TYPE,
+            p_activo in PRODUCTO.ACTIVO%TYPE,
+            p_idempresa in PRODUCTO.IDEMPRESA%TYPE,
+            p_tipoproducto_id in PRODUCTO.TIPOPRODUCTO_ID%TYPE,
+            p_fechaingreso in PRODUCTO.FECHAINGRESO%TYPE
+        )
+        is 
+        begin
+            update produccto set 
+                        NOMBRE=p_nombre, 
+                        PRECIO=p_precio, 
+                        DESCRIPCION=p_descripcion, 
+                        FOTOGRAFIA=p_fotografia, 
+                        ACTIVO=p_activo, 
+                        IDEMPRESA=p_idempresa, 
+                        TIPOPRODUCTO_ID=p_tipoproducto_id,
+                        FECHAINGRESO=p_fechaingreso
+        where ID = p_id;
+     commit;
+    end;
+
+   procedure pcd_borrar_persona (
+        p_id in PRODUCTO.ID%TYPE
+    )
+    is 
+    begin
+        delete from PRODUCTO where ID = p_id;
+        commit;
+    end;
+    
+   procedure  pcd_listarproducto is
+         cursor cur is        
+            select id, nombre, precio, descripcion, fotografia, activo, idempresa, tipoproducto_id, fechaingreso
+            from producto
+            order by id;
+        fila cur%ROWTYPE;
+    begin
+        open cur; 
+            loop
+                fetch CUR into fila;
+                exit when CUR%NOTFOUND;
+                DBMS_OUTPUT.put_liNE(fila.id || ' ' ||fila.nombre);
+            end loop;
+        close cur;
+    end;
+end pkg_producto;  
