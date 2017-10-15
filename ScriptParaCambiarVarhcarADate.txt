@@ -1,0 +1,5 @@
+/*Consulta que busca desde una fecha especifica a otra*/
+select * from persona where TO_CHAR(TO_DATE(fechanacimiento,'YYYY/MM/DD'), 'YYYY/MM/DD')
+between '1999/12/01' and '2055/09/01';
+/*Ejemplo de Parseo de Varchar2 a DATE para usar metodo BETWEEN*/
+SELECT TO_CHAR(TO_DATE(fechanacimiento,'YYYY/MM/DD'), 'YYYY/MM/DD') FROM persona;
