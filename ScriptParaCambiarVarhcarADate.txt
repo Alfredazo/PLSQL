@@ -3,3 +3,37 @@ select * from persona where TO_CHAR(TO_DATE(fechanacimiento,'YYYY/MM/DD'), 'YYYY
 between '1999/12/01' and '2055/09/01';
 /*Ejemplo de Parseo de Varchar2 a DATE para usar metodo BETWEEN*/
 SELECT TO_CHAR(TO_DATE(fechanacimiento,'YYYY/MM/DD'), 'YYYY/MM/DD') FROM persona;
+
+--------
+
+/*Consulta que busca desde una fecha especifica a otra*/
+select * from producto where TO_DATE(fechacaducidad,'DD/MM/YYYY')
+between '02/12/1991' and '01/12/2200';
+
+/*Consulta que muestra una lista recomendada por el Sistema una semana antes de la fecha de caducidad*/
+select id,  nombre, fechaingreso, fechacaducidad,TO_DATE(fechacaducidad,'DD/MM/YYYY') - TO_DATE(SYSDATE,'DD/MM/YYYY')
+from producto;
+/*El metodo de arriba deberia de ser cambiado por el encargado al colocar publicar activo de producto quedara 1 y sera visible en la pagina
+principal(HOME)*/
+
+
+Select * from producto;
+select * from tipoproducto;
+
+/*Consulta por seccion de pagina  tipo 1 Alimentos*/
+select p.nombre, p.precio, p.fotografia, t.nombre
+From producto p Join tipoproducto t
+on(t.id = p.tipoproducto_id)
+where p.TIPOPRODUCTO_ID = 1 and p.activo = 0;
+
+/*Consulta por seccion de pagina  tipo 2 Electronica*/
+select p.nombre, p.precio, p.fotografia, t.nombre
+From producto p Join tipoproducto t
+on(t.id = p.tipoproducto_id)
+where p.TIPOPRODUCTO_ID = 2 and p.activo = 0;
+
+/*Consulta por seccion de pagina  tipo 3 ROPA*/
+select p.nombre, p.precio, p.fotografia, t.nombre
+From producto p Join tipoproducto t
+on(t.id = p.tipoproducto_id)
+where p.TIPOPRODUCTO_ID = 3 and p.activo = 0;
