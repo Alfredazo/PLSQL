@@ -37,3 +37,10 @@ select p.nombre, p.precio, p.fotografia, t.nombre
 From producto p Join tipoproducto t
 on(t.id = p.tipoproducto_id)
 where p.TIPOPRODUCTO_ID = 3 and p.activo = 0;
+
+ String sql = "select a.id, a.nombre, a.descripcion, a.descuento, a.imagen, a.condiciones, a.fechainicio, a.fechatermino, s.nombre ,d.nombre , s.precio ";
+               sql+= " from oferta a inner join producto s ";
+               sql+= " on(a.producto_id = s.id)left join empresa d on(d.id = s.idempresa) ";
+               sql+= " where a.nombre like '%'||?||'%' or s.nombre like '%'||?||'%' ";
+               sql+= " order by s.precio asc";
+
